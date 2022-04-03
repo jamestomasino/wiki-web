@@ -1,7 +1,4 @@
 var fs = require('fs')
-const readline = require('readline')
-const { once } = require('events')
-var exec = require('child_process').exec
 
 function bufferFile(path) {
   try {

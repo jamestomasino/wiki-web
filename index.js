@@ -1,13 +1,10 @@
-import express from 'express'
-import * as fs from 'fs'
-import { path } from 'path'
-import { bufferFile } from './utils'
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import DOMPurify from 'dompurify'
-import { marked } from 'marked'
+const express = require('express')
+const fs = require('fs')
+const path = require('path')
+const { bufferFile } = require('./utils')
+const { DOMPurify } = require('dompurify')
+const { marked } = require('marked')
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
 const app = express()
 const port = 3000
 
@@ -46,7 +43,7 @@ app.use(express.static('/var/gopher'))
 app.get('*', function(req, res){
   let error = false
   if (req.path.indexOf('.html') !== -1) {
-    const file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path).replace(/\.html/, '.md'));
+    const file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path).replace(/\.html/, '.md'))
     fs.exists(file, function(exists) {
       if (exists) {
         const file = bufferFile('/var/www/wiki-web/' + decodeURIComponent(req.path).replace(/\.html/, '.md'))

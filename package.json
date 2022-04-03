@@ -4,20 +4,17 @@
   "description": "Node front-end to vimwiki",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel index.js -d dist",
-    "start": "npm run build && node dist/index.js"
+    "test": "eslint .",
+    "start": "node index.js"
   },
   "author": "James Tomasino",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "dompurify": "^2.3.6",
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "marked": "^4.0.12"
   },
   "devDependencies": {
-    "@babel/cli": "^7.17.6",
-    "@babel/core": "^7.17.8",
-    "@babel/preset-env": "^7.16.11",
     "eslint": "^8.12.0"
   }
 }
