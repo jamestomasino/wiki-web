@@ -38,7 +38,7 @@ app.get('/', async function (_req, res) {
   const fullUrl = 'https://wiki.tomasino.org/'
   const dirty = md.render(buffer)
   const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
-  res.render('basic', { content: content, canonical: fullUrl})
+  res.render('basic', { title: 'Tomasino Wiki', content: content, canonical: fullUrl})
 })
 
 // Any link to a direct static resource will show it
