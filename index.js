@@ -2,8 +2,11 @@ const express = require('express')
 const fs = require('fs')
 const path = require('path')
 const { bufferFile } = require('./utils')
-const { DOMPurify } = require('dompurify')
-const { marked } = require('marked')
+var md = require('markdown-it')()
+const createDOMPurify = require('dompurify')
+const { JSDOM } = require('jsdom')
+const window = new JSDOM('').window
+const DOMPurify = createDOMPurify(window)
 
 const app = express()
 const port = 3000
@@ -26,9 +29,9 @@ app.set('views', './views')
 app.set('view engine', 'wiki')
 
 app.get('/', async function (_req, res) {
-  const file = bufferFile('/var/www/wiki-web/index.md')
+  const buffer = bufferFile('/var/www/wiki-web/index.md')
   const fullUrl = 'https://wiki.tomasino.org/'
-  const dirty = marked.parse(file)
+  const dirty = md.render(buffer)
   const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
   res.render('basic', { content: content, canonical: fullUrl})
 })
@@ -42,13 +45,14 @@ app.use(express.static('/var/gopher'))
 // Grab anything that's a .txt and wrap it in .html
 app.get('*', function(req, res){
   let error = false
-  if (req.path.indexOf('.html') !== -1) {
-    const file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path).replace(/\.html/, '.md'))
+  if (req.path.indexOf('.') === -1) {
+    const file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path)) + '.md'
+    console.log('Request: ', file)
     fs.exists(file, function(exists) {
       if (exists) {
-        const file = bufferFile('/var/www/wiki-web/' + decodeURIComponent(req.path).replace(/\.html/, '.md'))
+        const buffer = bufferFile(file)
         const fullUrl = 'https://wiki.tomasino.org' + req.originalUrl
-        const dirty = marked.parse(file)
+        const dirty = md.render(buffer)
         const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
         res.render('basic', { content: content, canonical: fullUrl})
       } else {
