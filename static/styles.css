@@ -18,8 +18,13 @@ strong:after{content:"**";content:"**" / "";}
 em{font-style:italic;}
 em:before{content:"*";content:"*" / "";}
 em:after{content:"*";content:"*" / "";}
+input[type="checkbox"] { position: relative; top: 4px; width: 1.5em; height: 1.5em; border: 2px solid #303030; border-radius: 4px; appearance: none; outline: 1px solid #c1c1c1; cursor: pointer; }
+input[type="checkbox"]:checked { background: #c1c1c1; }
+label { padding-left: 10px; }
 @media (prefers-color-scheme: light) {
 	body{background:#edf4f9;color:#40302f;}
 	a{color:#172b73;text-decoration: underline;}
 	h1,h2,h3,h4,h5{color:#40302f;font-weight:bold;}
+	input[type="checkbox"] { border: 2px solid #c1c1c1; outline: 1px solid #303030; }
+	input[type="checkbox"]:checked { background: #303030; }
 }
