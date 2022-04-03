@@ -2,11 +2,16 @@ const express = require('express')
 const fs = require('fs')
 const path = require('path')
 const { bufferFile } = require('./utils')
-var md = require('markdown-it')()
 const createDOMPurify = require('dompurify')
 const { JSDOM } = require('jsdom')
 const window = new JSDOM('').window
 const DOMPurify = createDOMPurify(window)
+const md = require('markdown-it')()
+  .use(require('markdown-it-anchor'))
+  .use(require('markdown-it-table-of-contents'), { 'includeLevel': [1,2,3] })
+  .use(require('markdown-it-title'))
+  .use(require('markdown-it-footnote'))
+  .use(require('markdown-it-checkbox'))
 
 const app = express()
 const port = 3000
@@ -47,14 +52,15 @@ app.get('*', function(req, res){
   let error = false
   if (req.path.indexOf('.') === -1) {
     const file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path)) + '.md'
-    console.log('Request: ', file)
     fs.exists(file, function(exists) {
       if (exists) {
         const buffer = bufferFile(file)
         const fullUrl = 'https://wiki.tomasino.org' + req.originalUrl
-        const dirty = md.render(buffer)
+        const env = {}
+        const dirty = md.render(buffer, env)
         const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
-        res.render('basic', { content: content, canonical: fullUrl})
+        const title = env.title + ' | Tomasino Wiki'
+        res.render('basic', { title: title, content: content, canonical: fullUrl})
       } else {
         error = true
       }
