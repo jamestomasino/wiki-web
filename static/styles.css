@@ -4,9 +4,10 @@ ul{list-style-type: none;margin-left:1rem;}
 ul>li:before {content:"-";position:absolute;margin-left:-1.1rem;}
 a{text-decoration:none;color:cyan}
 p{margin-bottom:.75rem}
+hr{border:0;}
+hr:after{content:"---";content:"---" / "";display:block;}
 h1,h2,h3,h4,h5{line-height:100%;margin-top:2rem;margin-bottom:1rem;color:#c2f486;}
 h1:before{content:"# ";content:"# " / "";}
-h1:after{content:"-----";content:"-----" / "";display:block;}
 h2:before{content:"## ";content:"## " / "";}
 h3:before{content:"### ";content:"### " / "";}
 h4:before{content:"#### ";content:"#### " / "";}
