@@ -44,40 +44,32 @@ app.get('/', async function (_req, res) {
 // Any link to a direct static resource will show it
 app.use(express.static(path.join(__dirname, '/static')))
 
-// Any other gopher content directly linked will show as-is
-app.use(express.static('/var/gopher'))
+// Any other content directly linked will show as-is
+app.use(express.static('/var/www/wiki-web'))
 
-// Grab anything that's a .txt and wrap it in .html
+// Try anything else as a markdown file or show error page
 app.get('*', function(req, res){
-  let error = false
-  if (req.path.indexOf('.') === -1) {
-    const file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path)) + '.md'
-    fs.exists(file, function(exists) {
-      if (exists) {
-        const buffer = bufferFile(file)
-        const fullUrl = 'https://wiki.tomasino.org' + req.originalUrl
-        const env = {}
-        const dirty = md.render(buffer, env)
-        const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
-        const title = env.title + ' | Tomasino Wiki'
-        res.render('basic', { title: title, content: content, canonical: fullUrl})
-      } else {
-        error = true
-      }
-    })
-  } else {
-    error = true
-  }
-
-  // If resource isn't found, give the 404
-  if (error) {
-    const back = '<a href="/"><span class="dim">&lt;&lt;</span> BACK TO HOME</a>'
-    const error = 'Entry not found. Please try again.'
-    const content = back + '\n\n' + error
-    res.status(404)
-    const fullUrl = 'https://wiki.tomasino.org' + req.originalUrl
-    res.render('basic', { content: content, canonical: fullUrl})
-  }
+  const file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path)) + '.md'
+  fs.exists(file, function(exists) {
+    console.log('exists:', exists)
+    if (exists) {
+      const buffer = bufferFile(file)
+      const fullUrl = 'https://wiki.tomasino.org' + req.originalUrl
+      const env = {}
+      const dirty = md.render(buffer, env)
+      const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
+      const title = env.title + ' | Tomasino Wiki'
+      res.render('basic', { title: title, content: content, canonical: fullUrl})
+    } else {
+      console.log('error!')
+      const back = '<a href="/">&lt;&lt; BACK TO HOME</a>'
+      const error = '<p>Entry not found. Please try again.</p>'
+      const content = back + '<br><br>' + error
+      res.status(404)
+      const fullUrl = 'https://wiki.tomasino.org' + req.originalUrl
+      res.render('basic', { title: 'Error: Content not found', content: content, canonical: fullUrl})
+    }
+  })
 })
 
 app.listen(port, () => console.log(`listening on port ${port}!`))
