@@ -1,0 +1,11 @@
+{
+  "name": "wiki-web",
+  "version": "1.0.0",
+  "description": "Node front-end to vimwiki",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "James Tomasino",
+  "license": "AGPL-3.0-or-later"
+}
