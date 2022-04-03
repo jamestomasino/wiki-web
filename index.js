@@ -51,7 +51,6 @@ app.use(express.static('/var/www/wiki-web'))
 app.get('*', function(req, res){
   const file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path)) + '.md'
   fs.exists(file, function(exists) {
-    console.log('exists:', exists)
     if (exists) {
       const buffer = bufferFile(file)
       const fullUrl = 'https://wiki.tomasino.org' + req.originalUrl
@@ -61,7 +60,6 @@ app.get('*', function(req, res){
       const title = env.title + ' | Tomasino Wiki'
       res.render('basic', { title: title, content: content, canonical: fullUrl})
     } else {
-      console.log('error!')
       const back = '<a href="/">&lt;&lt; BACK TO HOME</a>'
       const error = '<p>Entry not found. Please try again.</p>'
       const content = back + '<br><br>' + error
