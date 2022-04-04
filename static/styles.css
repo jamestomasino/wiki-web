@@ -27,6 +27,9 @@ strong:after{content:"**";content:"**" / "";}
 em{font-style:italic;}
 em:before{content:"*";content:"*" / "";}
 em:after{content:"*";content:"*" / "";}
+u{text-decoration: underline;}
+u:before{content:"_";content:"_" / "";}
+u:after{content:"_";content:"_" / "";}
 input[type="checkbox"] { position: relative; top: 4px; width: 1.5em; height: 1.5em; border: 2px solid var(--checkbg); border-radius: 4px; appearance: none; outline: 1px solid var(--checkfg); cursor: pointer; }
 input[type="checkbox"]:checked { background: var(--checkfg); }
 label { padding-left: 10px; }

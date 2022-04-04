@@ -11,6 +11,8 @@ const md = require('markdown-it')()
   .use(require('markdown-it-title'))
   .use(require('markdown-it-footnote'))
   .use(require('markdown-it-checkbox'))
+  .use(require('markdown-it-underline'))
+  .use(require('markdown-it-prism'))
 
 const app = express()
 const port = 3000

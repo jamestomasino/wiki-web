@@ -7,12 +7,14 @@
     <meta name="robots" content="noindex">
     <title>##title##</title>
     <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/prism.css">
     <link rel="canonical" href="##canonical##">
   </head>
   <body>
     <div class="page-wrapper">
 ##content##
     </div>
+    <script src="/prism.js"></script>
     </body>
   </head>
 </html>
