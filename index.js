@@ -39,7 +39,7 @@ app.set('view engine', 'wiki')
 // Homepage
 app.get('/', async function (_req, res) {
   try {
-    var buffer = fs.readFileSync('/var/www/wiki-web/index.md', { encoding: 'utf8' })
+    var buffer = fs.readFileSync('/var/www/wiki-web/index.wiki', { encoding: 'utf8' })
     const fullUrl = 'https://wiki.tomasino.org/'
     const dirty = md.render(buffer)
     const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
@@ -61,7 +61,7 @@ app.use(express.static('/var/www/wiki-web'))
 // Try anything else as a markdown file or show error page
 app.get('*', function(req, res){
   try {
-    var file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path)) + '.md'
+    var file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path)) + '.wiki'
     var buffer = fs.readFileSync(file, { encoding: 'utf8' })
     const fullUrl = 'https://wiki.tomasino.org' + req.originalUrl
     const env = {}
@@ -71,7 +71,7 @@ app.get('*', function(req, res){
     res.render('basic', { title: title, content: content, canonical: fullUrl})
   } catch (e) {
     // Check if we have an unnecessary end slash and redirect
-    fs.stat(path.join('/var/www/wiki-web/', decodeURIComponent(req.path)).replace(/\/$/, '') + '.md', (error) => {
+    fs.stat(path.join('/var/www/wiki-web/', decodeURIComponent(req.path)).replace(/\/$/, '') + '.wiki', (error) => {
       if (error) {
         const back = '<a href="/">&lt;&lt; BACK TO HOME</a>'
         const error = '<p>Entry not found. Please try again.</p>'
