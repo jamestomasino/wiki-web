@@ -5,6 +5,7 @@
 	--checkbg: #303030;
 	--link: #00FFFF;
 	--heads: #c2f486;
+	--lines: #c2f486;
 	--prebg: #262626;
 }
 a,body,h1,h2,h3,h4,h5,html,li,p,span,strong,u,ul{margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}
@@ -15,30 +16,31 @@ ul li:last-of-type {margin-bottom:10px;}
 a{text-decoration:none;color:var(--link);}
 p{margin-bottom:.75rem}
 hr{border:0;}
-hr:after{content:"---";content:"---" / "";display:block;}
+hr:after{color:var(--lines);content:"---";display:block;}
 h1,h2,h3,h4,h5{line-height:100%;margin-top:2rem;margin-bottom:1rem;color:var(--heads);}
-h1:before{content:"# ";content:"# " / "";}
-h2:before{content:"## ";content:"## " / "";}
-h3:before{content:"### ";content:"### " / "";}
-h4:before{content:"#### ";content:"#### " / "";}
-h5:before{content:"##### ";content:"##### " / "";}
+h1:before{content:"# ";}
+h2:before{content:"## ";}
+h3:before{content:"### ";}
+h4:before{content:"#### ";}
+h5:before{content:"##### ";}
 strong{font-weight:700;}
-strong:before{content:"**";content:"**" / "";}
-strong:after{content:"**";content:"**" / "";}
+strong:before{content:"**";}
+strong:after{content:"**";}
 em{font-style:italic;}
-em:before{content:"*";content:"*" / "";}
-em:after{content:"*";content:"*" / "";}
+em:before{content:"*";}
+em:after{content:"*";}
 u{text-decoration: underline;}
-u:before{content:"_";content:"_" / "";}
-u:after{content:"_";content:"_" / "";}
+u:before{content:"_";}
+u:after{content:"_";}
 input[type="checkbox"] { position: relative; top: 4px; width: 1.5em; height: 1.5em; border: 2px solid var(--checkbg); border-radius: 4px; appearance: none; outline: 1px solid var(--checkfg); cursor: pointer; }
 input[type="checkbox"]:checked { background: var(--checkfg); }
 label { padding-left: 10px; }
 pre { display: block; padding: 10px; background: var(--prebg); overflow: scroll }
 .table-of-contents { border-left: 20px solid var(--prebg); padding-left: 20px; }
 table{ max-width:100%; border-collapse:collapse; }
-tr:not(:last-of-type){ border-bottom: 1px solid var(--body); }
-td:not(:last-of-type){ border-right: 1px solid var(--body); }
+thead,tr:not(:last-of-type){ border-bottom: 1px solid var(--lines); }
+td:not(:last-of-type){ border-right: 1px solid var(--lines); }
+td,th{ padding: 8px }
 
 @media (prefers-color-scheme: light) {
 	a{text-decoration: underline;}
@@ -50,6 +52,7 @@ td:not(:last-of-type){ border-right: 1px solid var(--body); }
 		--checkbg: #c1c1c1;
 		--link: #172b73;
 		--heads: #40302f;
+		--lines: #40302f;
 		--prebg: #e2e2e2;
 	}
 }
