@@ -38,7 +38,8 @@ label { padding-left: 10px; }
 pre { display: block; padding: 10px; background: var(--prebg); overflow: scroll }
 .table-of-contents { border-left: 20px solid var(--prebg); padding-left: 20px; }
 table{ max-width:100%; border-collapse:collapse; }
-thead,tr:not(:last-of-type){ border-bottom: 1px solid var(--lines); }
+thead{ background: var(--prebg); border-bottom: 1px solid var(--lines); }
+tr:not(:last-of-type){ border-bottom: 1px solid var(--lines); }
 td:not(:last-of-type){ border-right: 1px solid var(--lines); }
 td,th{ padding: 8px }
 
