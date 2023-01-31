@@ -1,6 +1,7 @@
 const express = require('express')
 const fs = require('fs')
 const path = require('path')
+const findInFiles = require('find-in-files')
 const createDOMPurify = require('dompurify')
 const { JSDOM } = require('jsdom')
 const window = new JSDOM('').window
@@ -20,9 +21,9 @@ const port = 3000
 // Engine for simple variable replacement in views
 app.engine('wiki', function (filePath, options, callback) {
   fs.readFile(filePath, function (err, content) {
-    var s
+    let s
     if (err) return callback(err)
-    var rendered = content.toString()
+    let rendered = content.toString()
     for (s in options) {
       if (typeof options[s] === 'string') {
         rendered = rendered.replace('##' + s + '##', options[s])
@@ -37,16 +38,42 @@ app.set('views', './views')
 app.set('view engine', 'wiki')
 
 // Homepage
-app.get('/', async function (_req, res) {
+app.get('/', function (_req, res) {
+  const fullUrl = 'https://wiki.tomasino.org/'
   try {
-    var buffer = fs.readFileSync('/var/www/wiki-web/index.wiki', { encoding: 'utf8' })
-    const fullUrl = 'https://wiki.tomasino.org/'
+    const buffer = fs.readFileSync('/var/www/wiki-web/index.wiki', { encoding: 'utf8' })
     const dirty = md.render(buffer)
     const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
     res.render('basic', { title: 'Tomasino Wiki', content: content, canonical: fullUrl})
-  } catch (e) {
+  } catch (_e) {
     const content = '<p>There was a problem loading the website. Please try again later.</p>'
-    const fullUrl = 'https://wiki.tomasino.org/'
+    res.status(404)
+    res.render('basic', { title: 'Error: Problem loading site', content: content, canonical: fullUrl})
+  }
+})
+
+app.get('/search/:query', function (req, res) {
+  const fullUrl = 'https://wiki.tomasino.org/search/'
+  const query = DOMPurify.sanitize(req.params.format)
+  try {
+    let buffer
+    findInFiles.findSync({'term': query, 'flags': 'ig'}, '/var/www/wiki-web/', '.wiki$')
+      .then(results => {
+        for (const result in results) {
+          const match = results[result]
+          buffer += 'Found "' + match.matches[0] + '" ' + match.count + ' times in "' + result + '"'
+        }
+        const dirty = md.render(buffer)
+        const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
+        res.render('basic', { title: 'Tomasino Wiki - Search', content: content, canonical: fullUrl})
+      })
+      .error(() => {
+        const content = '<p>There was a problem loading the website. Please try again later.</p>'
+        res.status(404)
+        res.render('basic', { title: 'Error: Problem loading site', content: content, canonical: fullUrl})
+      })
+  } catch (_e) {
+    const content = '<p>There was a problem loading the website. Please try again later.</p>'
     res.status(404)
     res.render('basic', { title: 'Error: Problem loading site', content: content, canonical: fullUrl})
   }
@@ -60,23 +87,22 @@ app.use(express.static('/var/www/wiki-web'))
 
 // Try anything else as a markdown file or show error page
 app.get('*', function(req, res){
+  const fullUrl = 'https://wiki.tomasino.org' + req.originalUrl
   try {
-    var file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path)) + '.wiki'
-    var buffer = fs.readFileSync(file, { encoding: 'utf8' })
-    const fullUrl = 'https://wiki.tomasino.org' + req.originalUrl
+    const file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path)) + '.wiki'
+    const buffer = fs.readFileSync(file, { encoding: 'utf8' })
     const env = {}
     const dirty = md.render(buffer, env)
     const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
     const title = env.title + ' | Tomasino Wiki'
     res.render('basic', { title: title, content: content, canonical: fullUrl})
-  } catch (e) {
+  } catch (_e) {
     // Check if we have an unnecessary end slash and redirect
     fs.stat(path.join('/var/www/wiki-web/', decodeURIComponent(req.path)).replace(/\/$/, '') + '.wiki', (error) => {
       if (error) {
         const back = '<a href="/">&lt;&lt; BACK TO HOME</a>'
         const error = '<p>Entry not found. Please try again.</p>'
         const content = back + '<br><br>' + error
-        const fullUrl = 'https://wiki.tomasino.org' + req.originalUrl
         res.status(404)
         res.render('basic', { title: 'Error: Content not found', content: content, canonical: fullUrl})
       } else {
