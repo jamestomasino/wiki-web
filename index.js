@@ -15,6 +15,7 @@ const md = require('markdown-it')()
   .use(require('markdown-it-underline'))
   .use(require('markdown-it-prism'))
 
+const rootURL = 'https://wiki.tomasino.org'
 const app = express()
 const port = 3000
 
@@ -39,7 +40,7 @@ app.set('view engine', 'wiki')
 
 // Homepage
 app.get('/', function (_req, res) {
-  const fullUrl = 'https://wiki.tomasino.org/'
+  const fullUrl = rootURL + '/'
   try {
     const buffer = fs.readFileSync('/var/www/wiki-web/index.wiki', { encoding: 'utf8' })
     const dirty = md.render(buffer)
@@ -52,26 +53,20 @@ app.get('/', function (_req, res) {
   }
 })
 
-app.get('/search/:query', function (req, res) {
-  const fullUrl = 'https://wiki.tomasino.org/search/'
-  const query = DOMPurify.sanitize(req.params.format)
+app.get('/search/:query', async function (req, res) {
+  const fullUrl = rootURL + '/search/'
+  const query = DOMPurify.sanitize(req.params.query)
   try {
-    let buffer
-    findInFiles.findSync({'term': query, 'flags': 'ig'}, '/var/www/wiki-web/', '.wiki$')
-      .then(results => {
-        for (const result in results) {
-          const match = results[result]
-          buffer += 'Found "' + match.matches[0] + '" ' + match.count + ' times in "' + result + '"'
-        }
-        const dirty = md.render(buffer)
-        const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
-        res.render('basic', { title: 'Tomasino Wiki - Search', content: content, canonical: fullUrl})
-      })
-      .error(() => {
-        const content = '<p>There was a problem loading the website. Please try again later.</p>'
-        res.status(404)
-        res.render('basic', { title: 'Error: Problem loading site', content: content, canonical: fullUrl})
-      })
+    let buffer = ''
+    const results = await findInFiles.find({'term': query, 'flags': 'ig'}, '/var/www/wiki-web/', '.wiki$')
+    for (const result in results) {
+      const match = results[result]
+      const link = result.replace(fullUrl, '').replace(/\.wiki$/, '')
+      buffer += '* Found "' + match.matches[0] + '" ' + match.count + ' times in "' + link + '"\n'
+    }
+    const dirty = md.render(buffer)
+    const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
+    res.render('basic', { title: 'Tomasino Wiki - Search', content: content, canonical: fullUrl})
   } catch (_e) {
     const content = '<p>There was a problem loading the website. Please try again later.</p>'
     res.status(404)
@@ -87,7 +82,7 @@ app.use(express.static('/var/www/wiki-web'))
 
 // Try anything else as a markdown file or show error page
 app.get('*', function(req, res){
-  const fullUrl = 'https://wiki.tomasino.org' + req.originalUrl
+  const fullUrl = rootURL + req.originalUrl
   try {
     const file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path)) + '.wiki'
     const buffer = fs.readFileSync(file, { encoding: 'utf8' })
