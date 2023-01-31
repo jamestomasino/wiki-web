@@ -59,10 +59,13 @@ app.get('/search/:query', async function (req, res) {
   try {
     let buffer = ''
     const results = await findInFiles.find({'term': query, 'flags': 'ig'}, '/var/www/wiki-web/', '.wiki$')
+    buffer += '# Found ' + Object.keys(results).length + ' matches\n'
     for (const result in results) {
       const match = results[result]
-      const link = result.replace(fullUrl, '').replace(/\.wiki$/, '')
-      buffer += '* Found "' + match.matches[0] + '" ' + match.count + ' times in "' + link + '"\n'
+      const link = result.replace(/\/var\/www\/wiki-web\//, '').replace(/\.wiki$/, '')
+      if (link !== 'index') {
+        buffer += '* [' + link.replace(/-/g, ' ').replace(/ {3}/g, ' - ') + '](/' + link + ') (' + match.count + ')\n'
+      }
     }
     const dirty = md.render(buffer)
     const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
