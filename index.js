@@ -59,7 +59,7 @@ app.get('/search/:query', async function (req, res) {
   try {
     let buffer = ''
     const results = await findInFiles.find({'term': query, 'flags': 'ig'}, '/var/www/wiki-web/', '.wiki$')
-    buffer += '<a href="/">&lt;&lt; BACK TO HOME</a>'
+    const back = '<a href="/">&lt;&lt; BACK TO HOME</a>'
     buffer += '# Found ' + Object.keys(results).length + ' matches\n'
     for (const result in results) {
       const match = results[result]
@@ -70,7 +70,7 @@ app.get('/search/:query', async function (req, res) {
     }
     const dirty = md.render(buffer)
     const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
-    res.render('basic', { title: 'Tomasino Wiki - Search', content: content, canonical: fullUrl})
+    res.render('basic', { title: 'Tomasino Wiki - Search', content: back + content, canonical: fullUrl})
   } catch (_e) {
     const content = '<p>There was a problem loading the website. Please try again later.</p>'
     res.status(404)
