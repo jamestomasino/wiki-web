@@ -59,6 +59,7 @@ app.get('/search/:query', async function (req, res) {
   try {
     let buffer = ''
     const results = await findInFiles.find({'term': query, 'flags': 'ig'}, '/var/www/wiki-web/', '.wiki$')
+    buffer += '<a href="/">&lt;&lt; BACK TO HOME</a>'
     buffer += '# Found ' + Object.keys(results).length + ' matches\n'
     for (const result in results) {
       const match = results[result]
