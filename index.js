@@ -16,9 +16,10 @@ const md = require('markdown-it')()
   .use(require('markdown-it-prism'))
 
 const rootURL = 'https://wiki.tomasino.org'
+const rootFolder = '/var/www/wiki-web/'
+const sourceFileExt = '.wiki'
 const app = express()
 const port = 3000
-const rootFolder = '/var/www/wiki-web/'
 
 // Engine for simple variable replacement in views
 app.engine('wiki', function (filePath, options, callback) {
@@ -43,7 +44,7 @@ app.set('view engine', 'wiki')
 app.get('/', function (_req, res) {
   const fullUrl = rootURL + '/'
   try {
-    const file = path.join(rootFolder, 'index.wiki')
+    const file = path.join(rootFolder, 'index', sourceFileExt)
     const buffer = fs.readFileSync(file, { encoding: 'utf8' })
     const dirty = md.render(buffer)
     const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
@@ -60,12 +61,12 @@ app.get('/search/:query', async function (req, res) {
   const query = DOMPurify.sanitize(req.params.query)
   try {
     let buffer = ''
-    const results = await findInFiles.find({'term': query, 'flags': 'ig'}, rootFolder, '.wiki$')
+    const results = await findInFiles.find({'term': query, 'flags': 'ig'}, rootFolder, sourceFileExt + '$')
     const back = '<a href="/">&lt;&lt; BACK TO HOME</a>'
     buffer += '# Found ' + Object.keys(results).length + ' matches\n'
     for (const result in results) {
       const match = results[result]
-      const link = result.replace(rootFolder, '').replace(/\.wiki$/, '')
+      const link = result.replace(rootFolder, '').replace(sourceFileExt, '')
       if (link !== 'index') {
         buffer += '* [' + link.replace(/-/g, ' ').replace(/ {3}/g, ' - ') + '](/' + link + ') (' + match.count + ')\n'
       }
@@ -90,7 +91,7 @@ app.use(express.static(rootFolder))
 app.get('*', function(req, res){
   const fullUrl = rootURL + req.originalUrl
   try {
-    const file = path.join(rootFolder, decodeURIComponent(req.path)) + '.wiki'
+    const file = path.join(rootFolder, decodeURIComponent(req.path), sourceFileExt)
     const buffer = fs.readFileSync(file, { encoding: 'utf8' })
     const env = {}
     const dirty = md.render(buffer, env)
@@ -99,7 +100,7 @@ app.get('*', function(req, res){
     res.render('basic', { title: title, content: content, canonical: fullUrl})
   } catch (_e) {
     // Check if we have an unnecessary end slash and redirect
-    fs.stat(path.join(rootFolder, decodeURIComponent(req.path)).replace(/\/$/, '') + '.wiki', (error) => {
+    fs.stat(path.join(rootFolder, decodeURIComponent(req.path)).replace(/\/$/, '') + sourceFileExt, (error) => {
       if (error) {
         const back = '<a href="/">&lt;&lt; BACK TO HOME</a>'
         const error = '<p>Entry not found. Please try again.</p>'
