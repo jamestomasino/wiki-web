@@ -91,7 +91,7 @@ app.use(express.static(rootFolder))
 app.get('*', function(req, res){
   const fullUrl = rootURL + req.originalUrl
   try {
-    const file = path.join(rootFolder, decodeURIComponent(req.path), sourceFileExt)
+    const file = path.join(rootFolder, decodeURIComponent(req.path)) + sourceFileExt
     const buffer = fs.readFileSync(file, { encoding: 'utf8' })
     const env = {}
     const dirty = md.render(buffer, env)
