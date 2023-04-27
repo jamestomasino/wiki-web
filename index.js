@@ -18,6 +18,7 @@ const md = require('markdown-it')()
 const rootURL = 'https://wiki.tomasino.org'
 const app = express()
 const port = 3000
+const rootFolder = '/var/www/wiki-web/'
 
 // Engine for simple variable replacement in views
 app.engine('wiki', function (filePath, options, callback) {
@@ -42,7 +43,8 @@ app.set('view engine', 'wiki')
 app.get('/', function (_req, res) {
   const fullUrl = rootURL + '/'
   try {
-    const buffer = fs.readFileSync('/var/www/wiki-web/index.wiki', { encoding: 'utf8' })
+    const file = path.join(rootFolder, 'index.wiki')
+    const buffer = fs.readFileSync(file, { encoding: 'utf8' })
     const dirty = md.render(buffer)
     const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
     res.render('basic', { title: 'Tomasino Wiki', content: content, canonical: fullUrl})
@@ -58,12 +60,12 @@ app.get('/search/:query', async function (req, res) {
   const query = DOMPurify.sanitize(req.params.query)
   try {
     let buffer = ''
-    const results = await findInFiles.find({'term': query, 'flags': 'ig'}, '/var/www/wiki-web/', '.wiki$')
+    const results = await findInFiles.find({'term': query, 'flags': 'ig'}, rootFolder, '.wiki$')
     const back = '<a href="/">&lt;&lt; BACK TO HOME</a>'
     buffer += '# Found ' + Object.keys(results).length + ' matches\n'
     for (const result in results) {
       const match = results[result]
-      const link = result.replace(/\/var\/www\/wiki-web\//, '').replace(/\.wiki$/, '')
+      const link = result.replace(rootFolder, '').replace(/\.wiki$/, '')
       if (link !== 'index') {
         buffer += '* [' + link.replace(/-/g, ' ').replace(/ {3}/g, ' - ') + '](/' + link + ') (' + match.count + ')\n'
       }
@@ -82,13 +84,13 @@ app.get('/search/:query', async function (req, res) {
 app.use(express.static(path.join(__dirname, '/static')))
 
 // Any other content directly linked will show as-is
-app.use(express.static('/var/www/wiki-web'))
+app.use(express.static(rootFolder))
 
 // Try anything else as a markdown file or show error page
 app.get('*', function(req, res){
   const fullUrl = rootURL + req.originalUrl
   try {
-    const file = path.join('/var/www/wiki-web/', decodeURIComponent(req.path)) + '.wiki'
+    const file = path.join(rootFolder, decodeURIComponent(req.path)) + '.wiki'
     const buffer = fs.readFileSync(file, { encoding: 'utf8' })
     const env = {}
     const dirty = md.render(buffer, env)
@@ -97,7 +99,7 @@ app.get('*', function(req, res){
     res.render('basic', { title: title, content: content, canonical: fullUrl})
   } catch (_e) {
     // Check if we have an unnecessary end slash and redirect
-    fs.stat(path.join('/var/www/wiki-web/', decodeURIComponent(req.path)).replace(/\/$/, '') + '.wiki', (error) => {
+    fs.stat(path.join(rootFolder, decodeURIComponent(req.path)).replace(/\/$/, '') + '.wiki', (error) => {
       if (error) {
         const back = '<a href="/">&lt;&lt; BACK TO HOME</a>'
         const error = '<p>Entry not found. Please try again.</p>'
