@@ -44,7 +44,7 @@ app.set('view engine', 'wiki')
 app.get('/', function (_req, res) {
   const fullUrl = rootURL + '/'
   try {
-    const file = path.join(rootFolder, 'index', sourceFileExt)
+    const file = path.join(rootFolder, 'index' + sourceFileExt)
     const buffer = fs.readFileSync(file, { encoding: 'utf8' })
     const dirty = md.render(buffer)
     const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
