@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset=utf-8>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="shrink-to-fit=no,width=device-width,height=device-height,initial-scale=1,user-scalable=1">
+    <meta name="robots" content="noindex">
+    <title>##title##</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/prism.css">
+    <link rel="canonical" href="##canonical##">
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <form action="/search">
+        <input name="q" placeholder="search term">
+        <button type="submit">Search</button>
+      </form>
+##content##
+    </div>
+    <script src="/prism.js"></script>
+    </body>
+  </head>
+</html>
