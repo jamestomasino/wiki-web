@@ -62,7 +62,6 @@ app.get('/search/', async function (req, res) {
   try {
     let buffer = ''
     const results = await findInFiles.find({'term': query, 'flags': 'ig'}, rootFolder, sourceFileExt + '$')
-    const back = '<a href="/">BACK TO HOME</a>'
     buffer += '# Found ' + Object.keys(results).length + ' matches\n'
     for (const result in results) {
       const match = results[result]
@@ -73,7 +72,7 @@ app.get('/search/', async function (req, res) {
     }
     const dirty = md.render(buffer)
     const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
-    res.render('basic', { title: 'Tomasino Wiki - Search', content: back + content, canonical: fullUrl})
+    res.render('basic', { title: 'Tomasino Wiki - Search', content: content, canonical: fullUrl})
   } catch (_e) {
     const content = '<p>There was a problem loading the website. Please try again later.</p>'
     res.status(404)
@@ -102,9 +101,8 @@ app.get('*', function(req, res){
     } catch (_e) {
       fs.stat(path.join(rootFolder, decodeURIComponent(req.path)).replace(/\/$/, '') + sourceFileExt, (error) => {
         if (error) {
-          const back = '<a href="/">BACK TO HOME</a>'
           const error = '<p>Entry not found. Please try again.</p>'
-          const content = back + '<br><br>' + error
+          const content = error
           res.status(404)
           res.render('basic', { title: 'Error: Content not found', content: content, canonical: fullUrl})
         } else {

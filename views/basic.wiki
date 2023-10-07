@@ -12,6 +12,7 @@
   </head>
   <body>
     <div class="page-wrapper">
+      <a class="back" href="/">HOME</a>
 ##content##
     </div>
     <script src="/prism.js"></script>
