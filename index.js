@@ -17,7 +17,7 @@ const md = require('markdown-it')()
 
 const rootURL = 'https://wiki.tomasino.org'
 const rootFolder = '/var/www/wiki-web/'
-const sourceFileExt = '.wiki'
+const sourceFileExt = '.md'
 const app = express()
 const port = 3000
 
