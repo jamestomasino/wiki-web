@@ -93,25 +93,34 @@ app.get('*', function(req, res){
   try {
     const file = path.join(rootFolder, decodeURIComponent(req.path)) + sourceFileExt
     const buffer = fs.readFileSync(file, { encoding: 'utf8' })
-    const env = {}
-    const dirty = md.render(buffer, env)
-    const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
-    const title = env.title + ' | Tomasino Wiki'
-    res.render('basic', { title: title, content: content, canonical: fullUrl})
+    renderFile(buffer, fullUrl, res)
   } catch (_e) {
-    // Check if we have an unnecessary end slash and redirect
-    fs.stat(path.join(rootFolder, decodeURIComponent(req.path)).replace(/\/$/, '') + sourceFileExt, (error) => {
-      if (error) {
-        const back = '<a href="/">&lt;&lt; BACK TO HOME</a>'
-        const error = '<p>Entry not found. Please try again.</p>'
-        const content = back + '<br><br>' + error
-        res.status(404)
-        res.render('basic', { title: 'Error: Content not found', content: content, canonical: fullUrl})
-      } else {
-        res.redirect(301, 'https://wiki.tomasino.org' + req.originalUrl.replace(/\/$/, ''))
-      }
-    })
+    try {
+      const file = path.join(rootFolder, decodeURIComponent(req.path), 'index') + sourceFileExt
+      const buffer = fs.readFileSync(file, { encoding: 'utf8' })
+      renderFile(buffer, fullUrl, res)
+    } catch (_e) {
+      fs.stat(path.join(rootFolder, decodeURIComponent(req.path)).replace(/\/$/, '') + sourceFileExt, (error) => {
+        if (error) {
+          const back = '<a href="/">&lt;&lt; BACK TO HOME</a>'
+          const error = '<p>Entry not found. Please try again.</p>'
+          const content = back + '<br><br>' + error
+          res.status(404)
+          res.render('basic', { title: 'Error: Content not found', content: content, canonical: fullUrl})
+        } else {
+          res.redirect(301, req.originalUrl.replace(/\/$/, ''))
+        }
+      })
+    }
   }
 })
+
+function renderFile(buffer, fullUrl, res) {
+  const env = {}
+  const dirty = md.render(buffer, env)
+  const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
+  const title = env.title + ' | Tomasino Wiki'
+  res.render('basic', { title: title, content: content, canonical: fullUrl})
+}
 
 app.listen(port, () => console.log(`listening on port ${port}!`))
