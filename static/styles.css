@@ -7,8 +7,8 @@
 	--head1: #c2f486;
 	--head2: #f486c8;
 	--head3: #86aef4;
-	--head4: #86aef4;
-	--head5: #86aef4;
+	--head4: #f1f72b;
+	--head5: #f4bce1;
 	--lines: #c2f486;
 	--prebg: #262626;
 }
@@ -58,6 +58,8 @@ sup{vertical-align:super;font-size:0.5em;}
 		--head1: #000;
 		--head2: #660863;
 		--head3: #082766;
+		--head4: #082766;
+		--head5: #082766;
 		--lines: #40302f;
 		--prebg: #e2e2e2;
 	}
