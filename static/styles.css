@@ -13,6 +13,7 @@
 	--prebg: #262626;
 }
 input,button{border:1px solid var(--lines);background-color: transparent;color:var(--body);padding:5px 8px;}
+form {margin-bottom: 1em;}
 a,body,h1,h2,h3,h4,h5,html,li,p,span,strong,u,ul{margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}
 body{font-family:Consolas,monaco,monospace;font-size:130%;line-height:1.4;margin:3% 5%;max-width:50em;background:var(--bg);color:var(--body);}
 ul{list-style-type: none;margin-left:1rem;}
