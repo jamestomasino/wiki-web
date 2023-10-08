@@ -10,6 +10,7 @@
   "author": "James Tomasino",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
+    "@jamestomasino/markdown-it-vimwikitags": "^1.0.0",
     "dompurify": "^2.3.6",
     "express": "^4.17.3",
     "find-in-files": "^0.5.0",
@@ -19,6 +20,7 @@
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-footnote": "^3.0.3",
     "markdown-it-prism": "^2.2.3",
+    "markdown-it-replacements": "^1.0.2",
     "markdown-it-table-of-contents": "^0.6.0",
     "markdown-it-title": "^4.0.0",
     "markdown-it-underline": "^1.0.1"

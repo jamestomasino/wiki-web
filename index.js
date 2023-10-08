@@ -6,7 +6,7 @@ const createDOMPurify = require('dompurify')
 const { JSDOM } = require('jsdom')
 const window = new JSDOM('').window
 const DOMPurify = createDOMPurify(window)
-const md = require('markdown-it')()
+const md = require('markdown-it')({typographer: true})
   .use(require('markdown-it-anchor'))
   .use(require('markdown-it-table-of-contents'), { 'includeLevel': [1,2,3] })
   .use(require('markdown-it-title'))
@@ -14,6 +14,7 @@ const md = require('markdown-it')()
   .use(require('markdown-it-checkbox'))
   .use(require('markdown-it-underline'))
   .use(require('markdown-it-prism'))
+  .use(require('@jamestomasino/markdown-it-vimwikitags'))
 
 const rootURL = 'https://wiki.tomasino.org'
 const rootFolder = '/var/www/wiki-web/'
