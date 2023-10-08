@@ -11,6 +11,7 @@
 	--head5: #f4bce1;
 	--lines: #c2f486;
 	--prebg: #262626;
+	--small: 0.6em;
 }
 input,button{border:1px solid var(--lines);background-color: transparent;color:var(--body);padding:5px 8px;}
 form {margin-bottom: 1em;}
@@ -36,6 +37,7 @@ input[type="checkbox"]:checked { background: var(--checkfg); }
 label { padding-left: 10px; }
 pre { display: block; padding: 10px; background: var(--prebg); overflow: scroll }
 .table-of-contents { margin-top:1em;border-left: 20px solid var(--prebg); padding-left: 20px; font-size: 0.8em;}
+blockquote{border-left: 20px solid var(--prebg);margin-left:0;padding-left:15px;}
 table{ max-width:100%; border-collapse:collapse; }
 thead{ background: var(--prebg); border-bottom: 1px solid var(--lines); }
 tr:not(:last-of-type){ border-bottom: 1px solid var(--lines); }
@@ -44,8 +46,9 @@ td,th{ padding: 8px }
 .back{visibility: hidden;position:relative;}
 .back::before {visibility:visible;font-size:28px;content:'⌂';}
 sup{vertical-align:super;font-size:0.5em;}
-.vimwikitag{font-size: 0.6em;}
+.vimwikitag{font-size:var(--small);}
 .vimwikitag::before{content:'🏷'; padding-right: 3px;}
+.footnotes{font-size:var(--small);}
 
 @media (prefers-color-scheme: light) {
 	a{text-decoration: underline;}
