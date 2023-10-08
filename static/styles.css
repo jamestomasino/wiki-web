@@ -34,7 +34,7 @@ input[type="checkbox"] { position: relative; top: 4px; width: 1.5em; height: 1.5
 input[type="checkbox"]:checked { background: var(--checkfg); }
 label { padding-left: 10px; }
 pre { display: block; padding: 10px; background: var(--prebg); overflow: scroll }
-.table-of-contents { border-left: 20px solid var(--prebg); padding-left: 20px; font-size: 0.8em;}
+.table-of-contents { margin-top:1em;border-left: 20px solid var(--prebg); padding-left: 20px; font-size: 0.8em;}
 table{ max-width:100%; border-collapse:collapse; }
 thead{ background: var(--prebg); border-bottom: 1px solid var(--lines); }
 tr:not(:last-of-type){ border-bottom: 1px solid var(--lines); }
@@ -43,6 +43,8 @@ td,th{ padding: 8px }
 .back{visibility: hidden;position:relative;}
 .back::before {visibility:visible;font-size:28px;content:'⌂';}
 sup{vertical-align:super;font-size:0.5em;}
+.vimwikitag{font-size: 0.6em;}
+.vimwikitag::before{content:'🏷'; padding-right: 3px;}
 
 @media (prefers-color-scheme: light) {
 	a{text-decoration: underline;}
