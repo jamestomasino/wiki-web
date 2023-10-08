@@ -64,13 +64,16 @@ app.get('/search/', async function (req, res) {
     let buffer = ''
     const results = await findInFiles.find({'term': query, 'flags': 'ig'}, rootFolder, sourceFileExt + '$')
     buffer += '# Found ' + Object.keys(results).length + ' matches\n'
+    const resultsFormatted = []
     for (const result in results) {
       const match = results[result]
       const link = result.replace(rootFolder, '').replace(sourceFileExt, '')
       if (link !== 'index') {
-        buffer += '* [' + link.replace(/-/g, ' ').replace(/ {3}/g, ' - ') + '](/' + link + ') (' + match.count + ')\n'
+        resultsFormatted.push('* [' + link.replace(/-/g, ' ').replace(/ {3}/g, ' - ') + '](/' + link + ') (' + match.count + ')\n')
       }
     }
+    const resultsSorted = resultsFormatted.sort()
+    buffer += resultsSorted.join('')
     const dirty = md.render(buffer)
     const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
     res.render('basic', { title: 'Tomasino Wiki - Search', content: content, canonical: fullUrl})
