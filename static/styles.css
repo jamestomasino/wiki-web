@@ -48,6 +48,7 @@ td,th{ padding: 8px }
 sup{vertical-align:super;font-size:0.5em;}
 .vimwikitag{font-size:var(--small);}
 .vimwikitag::before{content:'🏷'; padding-right: 3px;}
+.footnotes-sep{margin-top: 2em;}
 .footnotes{font-size:var(--small);}
 
 @media (prefers-color-scheme: light) {
