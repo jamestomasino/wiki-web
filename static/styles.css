@@ -50,6 +50,7 @@ sup{vertical-align:super;font-size:0.5em;}
 .vimwikitag::before{content:'🏷'; padding-right: 3px;}
 .footnotes-sep{margin-top: 2em;}
 .footnotes{font-size:var(--small);}
+img{max-width:100%;}
 
 @media (prefers-color-scheme: light) {
 	a{text-decoration: underline;}
