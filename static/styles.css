@@ -50,7 +50,7 @@ sup{vertical-align:super;font-size:0.5em;}
 .vimwikitag::before{content:'🏷'; padding-right: 3px;}
 .footnotes-sep{margin-top: 2em;}
 .footnotes{font-size:var(--small);}
-img{max-width:100%;}
+img{max-width:100%;height:auto;vertical-align:middle;font-style:italic;background-repeat:no-repeat;background-size:cover;shape-margin:0.75rem;}
 
 @media (prefers-color-scheme: light) {
 	a{color:var(--body);text-decoration:underline;text-decoration-color:var(--link);text-decoration-skip-ink:none;text-decoration-thickness:0.3rem;text-underline-offset:-0.25rem;transition:text-decoration 0.3s;}
