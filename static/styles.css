@@ -53,14 +53,16 @@ sup{vertical-align:super;font-size:0.5em;}
 img{max-width:100%;}
 
 @media (prefers-color-scheme: light) {
-	a{text-decoration: underline;}
+	a{color:var(--body);text-decoration:underline;text-decoration-color:var(--link);text-decoration-skip-ink:none;text-decoration-thickness:0.3rem;text-underline-offset:-0.25rem;transition:text-decoration 0.3s;}
+	a:hover{text-decoration-color:var(--linkhover);text-decoration-skip-ink:none;text-decoration-thickness:0.5rem;}
 	h1,h2,h3,h4,h5{font-weight:bold;}
 	:root {
 		--body: #40302f;
 		--bg: #edf4f9;
 		--checkfg: #303030;
 		--checkbg: #c1c1c1;
-		--link: #172b73;
+		--link: #ffdc6e;
+		--linkhover: #ffd244;
 		--head1: #000;
 		--head2: #660863;
 		--head3: #082766;
