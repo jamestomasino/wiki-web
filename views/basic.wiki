@@ -7,7 +7,6 @@
     <meta name="robots" content="noindex">
     <title>##title##</title>
     <link rel="stylesheet preload prefetch" href="https://tomasino.org/styles.css" as="style" type="text/css" crossorigin="anonymous">
-    <link rel="stylesheet" href="/prism.css">
     <link rel="canonical" href="##canonical##">
   </head>
   <body>
@@ -15,7 +14,6 @@
       <a class="back" href="/">HOME</a>
 ##content##
     </div>
-    <script src="/prism.js"></script>
     </body>
   </head>
 </html>
