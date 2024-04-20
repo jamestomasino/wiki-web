@@ -24,13 +24,23 @@
             series: [##content##]
           },
           {
-            height: 600,
+            labelDirection: 'explode',
+            chartPadding: 30,
+            labelOffset: 50,
+            height: '600px',
+            width: '100%',
+            axisY: {
+              type: Chartist.AutoScaleAxis,
+              onlyInteger: true
+            },
             axisX: {
               // type: Chartist.FixedScaleAxis,
               type: Chartist.AutoScaleAxis,
+              scaleMinSpace: 50,
+              labelOffset: { x: -30, y: 0 },
               labelInterpolationFnc: value =>
               new Date(value).toLocaleString(undefined, {
-                month: 'short',
+                month: 'numeric',
                 day: 'numeric',
                 year: 'numeric'
               })
