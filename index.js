@@ -118,7 +118,7 @@ app.get('/track/:id', function(req, res){
     csvparse.on('finish', () => {
       buffer = buffer.slice(0, -1)
       let data = '{ name: "' + req.params.id + '", data: [ ' + buffer + ' ] }'
-      res.render('track', { title: 'Tracking: ' + req.params.id, content: data, canonical: fullUrl})
+      res.render('track', { headline: 'Tracking: ' + req.params.id,title: 'Tracking: ' + req.params.id, content: data, canonical: fullUrl})
     })
 
     readstream.on('error', () => {

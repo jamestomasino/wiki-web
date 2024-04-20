@@ -14,7 +14,7 @@
   <body>
     <div class="page-wrapper">
       <a class="back" href="/">HOME</a>
-      <h1>##title##</h1>
+      <h1>##headline##</h1>
       <div id="chart"></div>
       <script src="/chartist.js"></script>
       <script type="text/javascript">
