@@ -8,7 +8,7 @@
     <title>##title##</title>
     <link rel="stylesheet preload prefetch" href="https://tomasino.org/styles.css" as="style" type="text/css" crossorigin="anonymous">
     <link rel="stylesheet" href="/chartist.css">
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/track.css">
     <link rel="canonical" href="##canonical##">
   </head>
   <body>
