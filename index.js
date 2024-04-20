@@ -86,6 +86,20 @@ app.get('/search/', async function (req, res) {
   }
 })
 
+app.get('/track/', function(req, res) {
+  const fullUrl = rootURL + req.originalUrl
+  let files = fs.readdirSync(trackFolder)
+  let buffer = '<h1>Tracking Values</h1><ul>'
+  files.map(file => {
+    let split = file.split('.')
+    split.pop()
+    let finalName = split.join('.')
+    buffer += '<li><a href="/track/' + finalName + '">' + finalName + '</a></li>'
+  })
+  buffer += '</ul>'
+  res.render('basic', { title: 'Tracking Values', content: buffer, canonical: fullUrl})
+})
+
 app.get('/track/:id', function(req, res){
   const fullUrl = rootURL + req.originalUrl
   const file = path.join(trackFolder, req.params.id) + '.csv'
