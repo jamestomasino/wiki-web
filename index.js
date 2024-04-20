@@ -6,6 +6,7 @@ const createDOMPurify = require('dompurify')
 const { JSDOM } = require('jsdom')
 const window = new JSDOM('').window
 const DOMPurify = createDOMPurify(window)
+const { parse } = require('csv-parse')
 const md = require('markdown-it')({typographer: true})
   .use(require('markdown-it-anchor'))
   .use(require('markdown-it-table-of-contents'), { 'includeLevel': [1,2,3] })
@@ -18,6 +19,7 @@ const md = require('markdown-it')({typographer: true})
 
 const rootURL = 'https://wiki.tomasino.org'
 const rootFolder = '/var/www/wiki-web/'
+const trackFolder = '/var/www/track/'
 const sourceFileExt = '.md'
 const app = express()
 const port = 3000
@@ -81,6 +83,42 @@ app.get('/search/', async function (req, res) {
     const content = '<p>There was a problem loading the website. Please try again later.</p>'
     res.status(404)
     res.render('basic', { title: 'Error: Problem loading site', content: content, canonical: fullUrl})
+  }
+})
+
+app.get('/track/:id', function(req, res){
+  const fullUrl = rootURL + req.originalUrl
+  const file = path.join(trackFolder, req.params.id) + '.csv'
+  let buffer = ''
+
+  try {
+    const readstream = fs.createReadStream(file)
+    const csvparse = readstream.pipe(parse({ delimiter: ',', from_line: 2 }))
+
+    csvparse.on('data', (row) => {
+      const date = row[0] + '/' + row[1] + '/' + row[2]
+      const num = row[3]
+      buffer += '{ x: new Date("' + date + '"), y:' + num + '},'
+    })
+
+    csvparse.on('finish', () => {
+      buffer = buffer.slice(0, -1)
+      let data = '{ name: "' + req.params.id + '", data: [ ' + buffer + ' ] }'
+      res.render('track', { title: 'Tracking: ' + req.params.id, content: data, canonical: fullUrl})
+    })
+
+    readstream.on('error', () => {
+      const error = '<p>Entry not found. Please try again.</p>'
+      const content = error
+      res.status(404)
+      res.render('basic', { title: 'Error: Content not found', content: content, canonical: fullUrl})
+    })
+
+  } catch (_e) {
+    const error = '<p>Entry not found. Please try again.</p>'
+    const content = error
+    res.status(404)
+    res.render('basic', { title: 'Error: Content not found', content: content, canonical: fullUrl})
   }
 })
 

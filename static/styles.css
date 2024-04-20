@@ -46,6 +46,29 @@ sup{vertical-align:super;font-size:0.5em;}
 .vimwikitag{font-size: 0.6em;}
 .vimwikitag::before{content:'🏷'; padding-right: 3px;}
 
+.ct-grid {
+	stroke: rgba(255,255,255,0.2);
+}
+
+.ct-series-a .ct-line {
+	fill: none;
+	stroke-width: 2px;
+	stroke: rgba(255, 255, 255, .2);
+}
+
+.ct-series-a .ct-point {
+	stroke-width: 4px;
+}
+
+.ct-series {
+	stroke: rgba(255, 255, 255, 1);
+}
+
+.ct-label {
+	fill: rgba(255, 255, 255, 1);
+	color: rgba(255, 255, 255, 1);
+}
+
 @media (prefers-color-scheme: light) {
 	a{text-decoration: underline;}
 	h1,h2,h3,h4,h5{font-weight:bold;}
@@ -60,5 +83,28 @@ sup{vertical-align:super;font-size:0.5em;}
 		--head3: #082766;
 		--lines: #40302f;
 		--prebg: #e2e2e2;
+	}
+
+	.ct-grid {
+		stroke: rgba(0,0,0,0.2);
+	}
+
+	.ct-series-a .ct-line {
+		fill: none;
+		stroke-width: 2px;
+		stroke: rgba(0,0,0,0.2);
+	}
+
+	.ct-series-a .ct-point {
+		stroke-width: 4px;
+	}
+
+	.ct-series {
+		stroke: rgba(0,0,0,1);
+	}
+
+	.ct-label {
+		fill: rgba(0,0,0,1);
+		color: rgba(0,0,0,1);
 	}
 }

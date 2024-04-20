@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset=utf-8>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="shrink-to-fit=no,width=device-width,height=device-height,initial-scale=1,user-scalable=1">
+    <meta name="robots" content="noindex">
+    <title>##title##</title>
+    <link rel="stylesheet" href="/chartist.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="canonical" href="##canonical##">
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <a class="back" href="/">HOME</a>
+      <div id="chart"></div>
+      <script src="/chartist.js"></script>
+      <script type="text/javascript">
+        new Chartist.LineChart(
+          '#chart',
+          {
+            series: [##content##]
+          },
+          {
+            axisX: {
+              type: Chartist.FixedScaleAxis,
+              divisor: 5,
+              labelInterpolationFnc: value =>
+              new Date(value).toLocaleString(undefined, {
+                month: 'short',
+                day: 'numeric'
+              })
+            }
+          }
+        );
+      </script>
+    </div>
+    </body>
+  </head>
+</html>
