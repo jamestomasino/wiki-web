@@ -23,13 +23,15 @@
             series: [##content##]
           },
           {
+            height: 600,
             axisX: {
-              type: Chartist.FixedScaleAxis,
-              divisor: 5,
+              // type: Chartist.FixedScaleAxis,
+              type: Chartist.AutoScaleAxis,
               labelInterpolationFnc: value =>
               new Date(value).toLocaleString(undefined, {
                 month: 'short',
-                day: 'numeric'
+                day: 'numeric',
+                year: 'numeric'
               })
             }
           }
