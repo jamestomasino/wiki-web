@@ -19,8 +19,8 @@ const md = require('markdown-it')({typographer: true})
   .use(require('@jamestomasino/markdown-it-vimwikitags'))
 
 const rootURL = 'https://wiki.tomasino.org'
-const rootFolder = '/mnt/data/shared/syncthing/wiki/' // '/var/www/wiki-web/'
-const trackFolder = '/mnt/data/shared/syncthing/track/' // '/var/www/track/'
+const rootFolder = '/var/www/wiki-web/'
+const trackFolder = '/var/www/track/'
 const sourceFileExt = '.md'
 const app = express()
 const port = 3000
