@@ -28,7 +28,7 @@
             chartPadding: 30,
             labelOffset: 0,
             height: '600px',
-            width: '2000px',
+            width: '100%',
             axisY: {
               type: Chartist.AutoScaleAxis,
               onlyInteger: true
