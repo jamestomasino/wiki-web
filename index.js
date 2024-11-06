@@ -1,4 +1,5 @@
 const express = require('express')
+const dotenv = require('dotenv').config()
 const fs = require('fs')
 const path = require('path')
 const findInFiles = require('find-in-files')
@@ -18,8 +19,8 @@ const md = require('markdown-it')({typographer: true})
   .use(require('@jamestomasino/markdown-it-vimwikitags'))
 
 const rootURL = 'https://wiki.tomasino.org'
-const rootFolder = '/var/www/wiki-web/'
-const trackFolder = '/var/www/track/'
+const rootFolder = '/mnt/data/shared/syncthing/wiki/' // '/var/www/wiki-web/'
+const trackFolder = '/mnt/data/shared/syncthing/track/' // '/var/www/track/'
 const sourceFileExt = '.md'
 const app = express()
 const port = 3000
@@ -56,6 +57,54 @@ app.get('/', function (_req, res) {
     const content = '<p>There was a problem loading the website. Please try again later.</p>'
     res.status(404)
     res.render('basic', { title: 'Error: Problem loading site', content: content, canonical: fullUrl})
+  }
+})
+
+app.get('/work/*', (req, res) => {
+  const reject = () => {
+    res.setHeader('www-authenticate', 'Basic')
+    res.sendStatus(401)
+  }
+
+  const authorization = req.headers.authorization
+
+  if (!authorization) {
+    return reject()
+  }
+
+  const [username, password] = Buffer.from(
+    authorization.replace('Basic ', ''),
+    'base64'
+  )
+    .toString()
+    .split(':')
+
+  if (!(username === process.env.WORK_USER && password === process.env.WORK_SECRET)) {
+    return reject()
+  }
+
+  const fullUrl = rootURL + req.originalUrl
+  try {
+    const file = path.join(rootFolder, decodeURIComponent(req.path)) + sourceFileExt
+    const buffer = fs.readFileSync(file, { encoding: 'utf8' })
+    renderFile(buffer, fullUrl, res)
+  } catch (_e) {
+    try {
+      const file = path.join(rootFolder, decodeURIComponent(req.path), 'index') + sourceFileExt
+      const buffer = fs.readFileSync(file, { encoding: 'utf8' })
+      renderFile(buffer, fullUrl, res)
+    } catch (_e) {
+      fs.stat(path.join(rootFolder, decodeURIComponent(req.path)).replace(/\/$/, '') + sourceFileExt, (error) => {
+        if (error) {
+          const error = '<p>Entry not found. Please try again.</p>'
+          const content = error
+          res.status(404)
+          res.render('basic', { title: 'Error: Content not found', content: content, canonical: fullUrl})
+        } else {
+          res.redirect(301, req.originalUrl.replace(/\/$/, ''))
+        }
+      })
+    }
   }
 })
 
