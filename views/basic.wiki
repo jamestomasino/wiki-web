@@ -8,6 +8,12 @@
     <title>##title##</title>
     <link rel="stylesheet preload prefetch" href="https://tomasino.org/styles.css" as="style" type="text/css" crossorigin="anonymous">
     <link rel="canonical" href="##canonical##">
+<style>
+th, td {
+  position: relative;
+  cursor: pointer;
+}
+</style>
   </head>
   <body>
     <div class="page-wrapper">

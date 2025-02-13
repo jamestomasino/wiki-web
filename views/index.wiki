@@ -6,7 +6,9 @@
     <meta name=viewport content="shrink-to-fit=no,width=device-width,height=device-height,initial-scale=1,user-scalable=1">
     <meta name="robots" content="noindex">
     <title>##title##</title>
-    <link rel="stylesheet preload prefetch" href="https://tomasino.org/styles.css" as="style" type="text/css" crossorigin="anonymous">
+    <link rel="preload prefetch" href="https://tomasino.org/fonts/AtkinsonHyperlegibleNextVF-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload prefetch" href="https://tomasino.org/fonts/AtkinsonHyperlegibleMonoVF-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet preload prefetch" href="https://tomasino.org/styles.css" as="style" type="text/css" crossorigin="use-credentials">
     <link rel="canonical" href="##canonical##">
   </head>
   <body>
