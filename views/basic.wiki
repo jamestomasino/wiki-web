@@ -14,13 +14,16 @@ th, td {
   cursor: pointer;
 }
 .book-meta {
-  border: 1px solid #ddd;
+  border: 1px solid currentColor;
   padding: 1rem;
   margin: 1rem 0 1.5rem;
-  background: #fafafa;
+  background: transparent;
+  color: inherit;
+  opacity: .92;
 }
 .book-meta h1 {
   margin: 0 0 .75rem;
+  color: inherit;
 }
 .book-meta dl {
   display: grid;
@@ -30,9 +33,11 @@ th, td {
 }
 .book-meta dt {
   font-weight: 700;
+  color: inherit;
 }
 .book-meta dd {
   margin: 0;
+  color: inherit;
 }
 </style>
   </head>
