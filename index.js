@@ -296,10 +296,27 @@ function renderBookMeta(fm) {
   let html = '<section class="book-meta"><h1>' + esc(fm.title || 'Book') + '</h1><dl>'
   fields.forEach(([key, label]) => {
     if (!fm[key]) return
+    if (key === 'rating') {
+      html += '<dt>' + esc(label) + '</dt><dd>' + renderRating(fm[key], esc) + '</dd>'
+      return
+    }
     html += '<dt>' + esc(label) + '</dt><dd>' + esc(fm[key]) + '</dd>'
   })
   html += '</dl></section>'
   return html
+}
+
+function renderRating(raw, esc) {
+  const n = Number(raw)
+  if (!Number.isFinite(n)) {
+    return esc(raw)
+  }
+  const clamped = Math.max(0, Math.min(5, n))
+  const full = Math.floor(clamped)
+  const half = clamped - full >= 0.5 ? 1 : 0
+  const empty = 5 - full - half
+  const stars = '★'.repeat(full) + (half ? '⯨' : '') + '☆'.repeat(empty)
+  return '<span class="book-stars" aria-label="' + esc(clamped.toFixed(1) + ' out of 5 stars') + '">' + stars + '</span> <span class="book-rating-num">' + esc(clamped.toFixed(1)) + '/5</span>'
 }
 
 app.listen(port, () => console.log(`listening on port ${port}!`))

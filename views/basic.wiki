@@ -39,6 +39,12 @@ th, td {
   margin: 0;
   color: inherit;
 }
+.book-stars {
+  letter-spacing: 0.04em;
+}
+.book-rating-num {
+  opacity: 0.85;
+}
 </style>
   </head>
   <body>
