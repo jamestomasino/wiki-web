@@ -219,11 +219,87 @@ app.get('*', function(req, res){
 })
 
 function renderFile(buffer, fullUrl, res) {
+  const parsed = parseFrontmatter(buffer)
+  let markdownBody = parsed.content
+  let prefix = ''
+
+  if (isBookPath(fullUrl) && parsed.frontmatter) {
+    prefix = renderBookMeta(parsed.frontmatter)
+  }
+
   const env = {}
-  const dirty = md.render(buffer, env)
+  const dirty = prefix + md.render(markdownBody, env)
   const content = DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } })
-  const title = env.title + ' | Tomasino Wiki'
+  const pageTitle = parsed.frontmatter && parsed.frontmatter.title ? parsed.frontmatter.title : env.title
+  const title = (pageTitle || 'Tomasino Wiki') + ' | Tomasino Wiki'
   res.render('basic', { title: title, content: content, canonical: fullUrl})
+}
+
+function isBookPath(fullUrl) {
+  try {
+    const u = new URL(fullUrl)
+    return u.pathname.startsWith('/books/')
+  } catch (_e) {
+    return false
+  }
+}
+
+function parseFrontmatter(raw) {
+  if (!raw || !raw.startsWith('---\n')) {
+    return { frontmatter: null, content: raw }
+  }
+
+  const end = raw.indexOf('\n---\n', 4)
+  if (end === -1) {
+    return { frontmatter: null, content: raw }
+  }
+
+  const block = raw.slice(4, end)
+  const body = raw.slice(end + 5)
+  const fm = {}
+
+  block.split('\n').forEach((line) => {
+    const idx = line.indexOf(':')
+    if (idx === -1) return
+    const key = line.slice(0, idx).trim()
+    let value = line.slice(idx + 1).trim()
+    if (value.startsWith('"') && value.endsWith('"') && value.length >= 2) {
+      value = value.slice(1, -1)
+    }
+    fm[key] = value
+  })
+
+  return { frontmatter: fm, content: body }
+}
+
+function renderBookMeta(fm) {
+  const fields = [
+    ['author', 'Author'],
+    ['year', 'Year'],
+    ['rating', 'Rating'],
+    ['status', 'Status'],
+    ['date_read', 'Date Read'],
+    ['publisher', 'Publisher'],
+    ['isbn13', 'ISBN13'],
+    ['isbn10', 'ISBN10'],
+    ['goodreads_id', 'Goodreads'],
+    ['tags', 'Tags']
+  ]
+
+  const esc = (s) => String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+
+  let html = '<section class="book-meta"><h1>' + esc(fm.title || 'Book') + '</h1><dl>'
+  fields.forEach(([key, label]) => {
+    if (!fm[key]) return
+    html += '<dt>' + esc(label) + '</dt><dd>' + esc(fm[key]) + '</dd>'
+  })
+  html += '</dl></section>'
+  return html
 }
 
 app.listen(port, () => console.log(`listening on port ${port}!`))

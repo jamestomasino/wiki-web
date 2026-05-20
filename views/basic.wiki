@@ -13,6 +13,27 @@ th, td {
   position: relative;
   cursor: pointer;
 }
+.book-meta {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  margin: 1rem 0 1.5rem;
+  background: #fafafa;
+}
+.book-meta h1 {
+  margin: 0 0 .75rem;
+}
+.book-meta dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: .3rem .75rem;
+  margin: 0;
+}
+.book-meta dt {
+  font-weight: 700;
+}
+.book-meta dd {
+  margin: 0;
+}
 </style>
   </head>
   <body>
