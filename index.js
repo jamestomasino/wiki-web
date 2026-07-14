@@ -316,7 +316,8 @@ function renderRating(raw, esc) {
   const half = clamped - full >= 0.5 ? 1 : 0
   const empty = 5 - full - half
   const stars = '★'.repeat(full) + (half ? '⯨' : '') + '☆'.repeat(empty)
-  return '<span class="book-stars" aria-label="' + esc(clamped.toFixed(1) + ' out of 5 stars') + '">' + stars + '</span> <span class="book-rating-num">' + esc(clamped.toFixed(1)) + '/5</span>'
+  const ratingStr = clamped % 1 === 0 ? clamped.toFixed(0) : clamped.toFixed(1)
+  return '<span class="book-stars" aria-label="' + esc(ratingStr + ' out of 5 stars') + '">' + stars + '</span> <span class="book-rating-num">' + esc(ratingStr) + '/5</span>'
 }
 
 app.listen(port, () => console.log(`listening on port ${port}!`))
